@@ -1,4 +1,7 @@
+
 from django.db import models
+from django.utils import timezone
+
 from finding.utils import from_cyrillic_to_eng
 
 
@@ -52,7 +55,9 @@ class Vacancy(models.Model):
     company = models.CharField(max_length=250, verbose_name="Работодатель")
     description = models.TextField(verbose_name="Описание вакансии")
     # default date
-    timestamps = models.DateField(auto_now_add=True)
+    timestamp = models.DateField(default=timezone.now)
+
+    # timestamps = models.DateField(auto_now_add=True, default=django.utils.timezone.now)
 
     class Meta:
         verbose_name = 'Вакансию'
