@@ -17,8 +17,10 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from .views.view import get_home_page
+from finding.views import home_view
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', get_home_page),
+    path('vacant/', home_view),
 ]

@@ -51,7 +51,7 @@ class Vacancy(models.Model):
     city = models.ForeignKey('City', on_delete=models.CASCADE, verbose_name="Город")
     language = models.ForeignKey(Language, on_delete=models.CASCADE,
                                  verbose_name="Язык программирования")
-    url = models.URLField(max_length=500, unique=True)
+    url = models.URLField(unique=True)
     company = models.CharField(max_length=250, verbose_name="Работодатель")
     description = models.TextField(verbose_name="Описание вакансии")
     # default date
