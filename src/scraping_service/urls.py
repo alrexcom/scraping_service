@@ -21,6 +21,7 @@ from finding.views import home_view
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', get_home_page),
-    path('vacant/', home_view),
+    # path('', get_home_page),
+    path('', home_view),
+    # path('vacant/', home_view),
 ]
