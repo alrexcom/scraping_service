@@ -8,48 +8,39 @@
           integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
 </head>
 <body style="background-color: burlywood">
-
+<div class="container my-1">
+<nav class="navbar bg-black " data-bs-theme="dark">
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown"
+            aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNavDropdown">
+        <ul class="navbar-nav mx-2">
+            <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="/admin" target="_blank">Admin</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/">Главная</a>
+            </li>
+        </ul>
+    </div>
+</nav>
+</div>
 <div class="container my-3">
+
     <form class="row row-cols-lg-auto g-3 align-items-center" action="">
 
-        <nav class="navbar bg-primary " data-bs-theme="dark">
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown"
-                    aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNavDropdown">
-                <ul class="navbar-nav mx-2">
-                    <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="/admin" target="_blank">Admin</a>
-                    </li>
-{#                    <li class="nav-item">#}
-{#                        <a class="nav-link" href="/vacant" target="_self">Вакансии</a>#}
-{#                    </li>#}
-                    <li class="nav-item">
-                        <a class="nav-link" href="/" >Главная</a>
-                    </li>
-                </ul>
-            </div>
-
-        </nav>
-
-
         <div class="col-12">
             <div class="input-group">
-                <div class="input-group-text">@</div>
-                <input type="text" class="form-control" name="city"
-                       id="inlineFormInputGroupUsername" placeholder="Город">
+                {{ form.city }}
             </div>
         </div>
         <div class="col-12">
             <div class="input-group">
-                <div class="input-group-text">Я</div>
-                <label for="inlineFormInputGroupUsername"></label>
-                <input type="text" class="form-control" name="language"
-                          id="inlineFormInputGroupUsername"
-                       placeholder="Язык программирования">
+                {{ form.language }}
             </div>
         </div>
+
         <div class="col-12">
             <button type="submit" class="btn btn-primary">Поиск</button>
         </div>
