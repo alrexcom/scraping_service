@@ -8,13 +8,16 @@ class FindForm(forms.Form):
                                   required=False,
                                   widget=forms.Select(
                                       attrs={
-                                          'class': 'form-select'
+                                          'class': 'form-select '
                                       }),
                                   label='',
                                   empty_label='Выберете расположение'
                                   )
     language = forms.ModelChoiceField(queryset=Language.objects.all(),
-                                      to_field_name='slug', required=False,
-                                      widget=forms.Select(attrs={'class': 'form-select'}),
-                                      empty_label='Язык программирования'
+                                      to_field_name='slug',
+                                      required=False,
+                                      widget=forms.Select(
+                                          attrs={'class': 'form-select mx-3'}),
+                                      empty_label='Язык программирования',
+                                      label=''
                                       )

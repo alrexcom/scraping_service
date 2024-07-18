@@ -9,40 +9,35 @@
 </head>
 <body style="background-color: burlywood">
 <div class="container my-1">
-<nav class="navbar bg-black " data-bs-theme="dark">
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown"
-            aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarNavDropdown">
-        <ul class="navbar-nav mx-2">
-            <li class="nav-item">
-                <a class="nav-link active" aria-current="page" href="/admin" target="_blank">Admin</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="/">Главная</a>
-            </li>
-        </ul>
-    </div>
-</nav>
+    <nav class="navbar bg-black " data-bs-theme="dark">
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown"
+                aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNavDropdown">
+            <ul class="navbar-nav mx-2">
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="/admin" target="_blank">Admin</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/">Главная</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
 </div>
 <div class="container my-3">
-
     <form class="row row-cols-lg-auto g-3 align-items-center" action="">
-
         <div class="col-12">
             <div class="input-group">
-                {{ form.city }}
-            </div>
-        </div>
-        <div class="col-12">
-            <div class="input-group">
-                {{ form.language }}
+                {{ form.as_p }}
             </div>
         </div>
 
         <div class="col-12">
-            <button type="submit" class="btn btn-primary">Поиск</button>
+            <p class="mx-2">
+                <button type="submit" class="btn btn-primary">Поиск</button>
+            </p>
         </div>
     </form>
 </div>
