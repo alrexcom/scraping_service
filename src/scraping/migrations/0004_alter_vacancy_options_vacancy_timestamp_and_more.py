@@ -8,7 +8,7 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('finding', '0003_alter_city_slug_vacancy'),
+        ('scraping', '0003_alter_city_slug_vacancy'),
     ]
 
     operations = [
@@ -25,7 +25,7 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='vacancy',
             name='city',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='finding.city', verbose_name='Город'),
+            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='scraping.city', verbose_name='Город'),
         ),
         migrations.AlterField(
             model_name='vacancy',
@@ -40,7 +40,7 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='vacancy',
             name='language',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='finding.language', verbose_name='Язык программирования'),
+            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='scraping.language', verbose_name='Язык программирования'),
         ),
         migrations.AlterField(
             model_name='vacancy',

@@ -6,7 +6,7 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('finding', '0004_alter_vacancy_options_vacancy_timestamp_and_more'),
+        ('scraping', '0004_alter_vacancy_options_vacancy_timestamp_and_more'),
     ]
 
     operations = [

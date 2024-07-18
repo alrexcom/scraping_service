@@ -7,7 +7,7 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('finding', '0002_language_alter_city_options_alter_city_name_and_more'),
+        ('scraping', '0002_language_alter_city_options_alter_city_name_and_more'),
     ]
 
     operations = [
@@ -24,8 +24,8 @@ class Migration(migrations.Migration):
                 ('url', models.URLField(max_length=500)),
                 ('company', models.CharField(max_length=250, verbose_name='')),
                 ('description', models.TextField(verbose_name='')),
-                ('city', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='finding.city', verbose_name='')),
-                ('language', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='finding.language', verbose_name='')),
+                ('city', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='scraping.city', verbose_name='')),
+                ('language', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='scraping.language', verbose_name='')),
             ],
             options={
                 'verbose_name': 'Вакансии',

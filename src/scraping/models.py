@@ -2,13 +2,13 @@
 from django.db import models
 from django.utils import timezone
 
-from finding.utils import from_cyrillic_to_eng
+from scraping.utils import from_cyrillic_to_eng
 
 
 class City(models.Model):
     name = models.CharField(max_length=100,
                             verbose_name="Наименование населённого пункта", unique=True)
-    slug = models.CharField(max_length=50, blank=True, verbose_name='Тэги')
+    slug = models.CharField(max_length=60, blank=True, verbose_name='Тэги')
 
     class Meta:
         verbose_name = "Населённый пункт"
@@ -31,7 +31,7 @@ class City(models.Model):
 class Language(models.Model):
     name = models.CharField(max_length=100,
                             verbose_name="Язык программирования", unique=True)
-    slug = models.CharField(max_length=50, blank=True, verbose_name='Тэги')
+    slug = models.CharField(max_length=60, blank=True, verbose_name='Тэги')
 
     class Meta:
         verbose_name = "Язык программирования"
