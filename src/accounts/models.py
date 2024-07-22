@@ -6,7 +6,7 @@ from django.db import models
 # Create your models here.
 
 class MyUserManager(BaseUserManager):
-    def create_user(self, email,  password=None):
+    def create_user(self, email, password=None):
         """
         Creates and saves a User with the given email, date of
         birth and password.
@@ -37,14 +37,19 @@ class MyUserManager(BaseUserManager):
 
 
 class MyUser(AbstractBaseUser):
+    class Meta:
+        verbose_name = 'Пользователя',
+        verbose_name_plural = 'Пользователи'
+
     email = models.EmailField(
-        verbose_name="email address",
+        verbose_name="Адрес электронной почты",
         max_length=255,
         unique=True,
     )
-    # date_of_birth = models.DateField()
-    is_active = models.BooleanField(default=True)
-    is_admin = models.BooleanField(default=False)
+
+    # title = models.CharField(max_length=250, verbose_name="Аккаунты")
+    is_active = models.BooleanField(default=True, verbose_name="Активен?")
+    is_admin = models.BooleanField(default=False, verbose_name="Админ?")
     city = models.ForeignKey('scraping.City', on_delete=models.SET_NULL, null=True, blank=True)
     language = models.ForeignKey('scraping.Language', on_delete=models.SET_NULL, null=True, blank=True)
     send_email = models.BooleanField(default=True)
