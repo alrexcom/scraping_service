@@ -25,10 +25,10 @@ headers = [
 ]
 
 
-def hhru():
+def hhru(url_):
     # print(response.text)
-    url_ = ('https://hh.ru/search/vacancy?text=Python&salary=&ored_clusters=true&area=113&hhtmFrom=vacancy_search_list'
-            '&hhtmFromLabel=vacancy_search_line')
+    # url_ = ('https://hh.ru/search/vacancy?text=Python&salary=&ored_clusters=true&area=113&hhtmFrom=vacancy_search_list'
+    #         '&hhtmFromLabel=vacancy_search_line')
     errors = []
     jobs = []
     headers_ = headers[randint(0, len(headers) - 1)]
@@ -132,10 +132,10 @@ def get_details(urls_, headers_):
             'errors_url': errors}
 
 
-def superjobru():
+def superjobru(url_):
     # print(response.text)
     domain = "https://russia.superjob.ru"
-    url_ = ('https://russia.superjob.ru/vacancy/search/?keywords=Python')
+    # url_ = ('https://russia.superjob.ru/vacancy/search/?keywords=Python')
     errors = []
     jobs = []
     headers_ = headers[randint(0, len(headers) - 1)]
@@ -221,12 +221,12 @@ def details_superjob(urls_, headers_):
     return {'description': description, 'opyt': opyt, 'skills': skills, 'errors': errors}
 
 
-if __name__ == '__main__':
-    jobs_superjob, errors_superjob = superjobru()
-
-    jobs_hh, errors_hh = hhru()
-
-    with open('vacans.txt', 'w', encoding='utf-8') as f:
-        f.write(str(jobs_hh + jobs_superjob))
-
-    print("ok")
+# if __name__ == '__main__':
+#     jobs_superjob, errors_superjob = superjobru()
+#
+#     jobs_hh, errors_hh = hhru()
+#
+#     with open('vacans.txt', 'w', encoding='utf-8') as f:
+#         f.write(str(jobs_hh + jobs_superjob))
+#
+#     print("ok")
