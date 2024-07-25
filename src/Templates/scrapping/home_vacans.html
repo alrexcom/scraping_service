@@ -7,20 +7,111 @@
     {% for obj in object_list %}
         <div class="card my-3">
             <div class="card-header">
-                <a class="btn btn-primary" href="{{ obj.url }}" id="top-link">
-                    {{ obj.title }}</a> &nbsp;
-                Фирма:<b> {{ obj.company }} </b>&nbsp;
-                {{ obj.language.name }}
+                <div class="container">
+                    <div class="row">
+                        <p class="my-2">
+                            <a class="btn btn-primary" href="{{ obj.url }}"
+                               id="top-link">    {{ obj.title }}
+                            </a>
+                        </p>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <h4> {{ obj.company }} </h4>
+                            <p class="my-1">{{ obj.address | safe}}</p>
+                            <p><img src="{{ obj.logo_url }}" alt="{{ obj.company }}" width="90px"></p>
+                        </div>
+                        <div class="col">
+                            <ul class="list-unstyled">
+
+                                {#                    <li><small#}
+                                {#                            class="badge text-bg-secondary">Адрес</small>: {{ obj.city.name }} &nbsp;#}
+                                {#                        <p>{{ obj.address | safe }}</p>#}
+                                {#                    </li>#}
+                                {% if obj.salary %}
+                                    <li><small
+                                            class="badge text-bg-secondary">Зарплата</small>:
+                                        {{ obj.salary.title.lower }}
+                                    </li>
+                                {% endif %}
+                                {% if obj.skills %}
+                                    <li><small class="badge text-bg-secondary">Умения</small>:
+                                        {{ obj.skills.title }}
+                                    </li>
+                                {% endif %}
+                                {% if obj.job_day %}
+                                    <li><small
+                                            class="badge text-bg-secondary">Занятость</small>:
+                                        {{ obj.job_day.title }}
+                                    </li>
+                                {% endif %}
+                                {% if obj.opyt %}
+                                    <li><small class="badge text-bg-secondary">Опыт</small>:
+                                        {{ obj.opyt.title }}</li>
+                                {% endif %}
+                                {% if obj.date_public %}
+                                    <li><small
+                                            class="badge text-bg-secondary">Опубликовано</small>: {{ obj.date_public.title }}
+                                    </li>
+                                {% endif %}
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+
+                {#                {% if obj.logo_url %}#}
+                {#                    <a href="{{ obj.company_url }}">#}
+                {#                        <img class="img-thumbnail" src="{{ obj.logo_url }}" alt=" {{ obj.company }}" width="50px"/>#}
+                {#                    </a>#}
+                {#                {% endif %}#}
+
+
+                {#                {{ obj.language.name  }} #}
+
+
             </div>
+
+
             <div class="card-body">
+
                 <blockquote class="blockquote mb-0">
-                    <p style='font-size: small'>
-                        {{ obj.description }}
-                    </p>
+                    <div class="accordion accordion-flush" id="accordionFlushExample">
+                        <div class="accordion-item">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                        data-bs-target="#flush-collapseOne{{ obj.id }}" aria-expanded="false"
+                                        aria-controls="flush-collapseOne">
+                                    Подробнее..
+                                </button>
+                            </h2>
+                            <div id="flush-collapseOne{{ obj.id }}" class="accordion-collapse collapse"
+                                 data-bs-parent="#accordionFlushExample">
+                                <div class="accordion-body">
+                                    {{ obj.description | safe }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    {#                    <p class="text-wrap" style="font-size: small">#}
+                    {#                        {{ obj.description | safe }}#}
+                    {#                    </p>#}
+                    <hr>
+
                     <footer class="blockquote-footer">
-                        <small>{{ obj.timestamp }} | {{ obj.city.name }}</small>
+
+                        <small>Дата сохранения: {{ obj.timestamp }} с сайта
+                            <a href="{{ obj.site }}">
+                                {{ obj.site.title }}
+                            </a>
+                        </small>
                     </footer>
+
                 </blockquote>
+
+
             </div>
         </div>
     {% empty %}

@@ -1,4 +1,3 @@
-
 from django.db import models
 from django.utils import timezone
 
@@ -52,7 +51,17 @@ class Vacancy(models.Model):
     language = models.ForeignKey(Language, on_delete=models.CASCADE,
                                  verbose_name="Язык программирования")
     url = models.URLField(unique=True)
+    site = models.URLField(max_length=250, verbose_name="Сайт", default=None, null=True)
     company = models.CharField(max_length=250, verbose_name="Работодатель")
+    salary = models.CharField(max_length=250, verbose_name="Вознаграждение", default=None, null=True)
+    opyt = models.CharField(max_length=150, verbose_name="Опыт", default=None, null=True)
+    skills = models.CharField(max_length=250, verbose_name="Требования", default=None, null=True)
+    address = models.CharField(max_length=250, verbose_name="Адрес компании", default=None, null=True)
+    date_public = models.CharField(max_length=250, verbose_name="Опубликовано", default=None, null=True)
+    errors_url = models.URLField(max_length=250, verbose_name="Ошибочный детальный url", default=None, null=True)
+    logo_url = models.URLField(max_length=250, verbose_name="Ссылка лого компании", default=None, null=True)
+    company_url = models.URLField(max_length=250, verbose_name="Ссылка на фирму", default=None, null=True)
+    job_day = models.CharField(max_length=150, verbose_name="Занятость", default=None, null=True)
     description = models.TextField(verbose_name="Описание вакансии")
     # default date
     timestamp = models.DateField(default=timezone.now)
@@ -65,3 +74,8 @@ class Vacancy(models.Model):
 
     def __str__(self):
         return self.title
+
+
+class Error(models.Model):
+    timestamp = models.DateField(default=timezone.now)
+    data = models.JSONField(default=dict)

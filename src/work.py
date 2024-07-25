@@ -25,12 +25,22 @@ headers = [
 ]
 
 
+
+
+notneed = ['преподаватель', 'учитель', 'педагог','школу', 'школа','тьютор']
+
+
+def not_needed_records(title):
+    return any(keyword in title.lower() for keyword in notneed)
+
+
 def hhru(url_):
     # print(response.text)
     # url_ = ('https://hh.ru/search/vacancy?text=Python&salary=&ored_clusters=true&area=113&hhtmFrom=vacancy_search_list'
     #         '&hhtmFromLabel=vacancy_search_line')
     errors = []
     jobs = []
+    data = []
     headers_ = headers[randint(0, len(headers) - 1)]
     response = requests.get(url_, headers=headers_)
     if response.status_code == 200:
@@ -42,25 +52,35 @@ def hhru(url_):
         for div in div_list:
             title_card = div.find('h2', class_='bloko-header-section-2')
             if title_card:
-                opyt = div.find('span', {'data-qa': 'vacancy-serp__vacancy-work-experience'}).text
+                opyt = div.find('span', {'data-qa': 'vacancy-serp__vacancy-work-experience'})
+                if opyt:
+                    opyt = opyt.text
 
                 title = title_card.text
-                title_url = title_card.a['href']
-                # На другой странице по ссылке на вакансию подробнее
-                data = get_details(title_url, headers_)
+                if not not_needed_records(title):
+                    title_url = title_card.a['href']
+                    # На другой странице по ссылке на вакансию подробнее
+                    data = get_details(title_url, headers_)
+                    domain = "https://hh.ru"
+                    company_url = div.find('a', {'data-qa': 'vacancy-serp__vacancy-employer'})
+                    company = company_url.span.text
 
-                firma_url = div.find('a', {'data-qa': 'vacancy-serp__vacancy-employer'})
-                firma = firma_url.span.text
+                    # city = div.find('span', {'data-qa': 'vacancy-serp__vacancy-address'}).span.text
 
-                city = div.find('span', {'data-qa': 'vacancy-serp__vacancy-address'}).span.text
+                    # print(f"{title} || {opyt} ||{city}|| Фирма '{firma}' https://hh.ru/{firma_url['href']}")
+                    company_url = domain + company_url['href']
 
-                # print(f"{title} || {opyt} ||{city}|| Фирма '{firma}' https://hh.ru/{firma_url['href']}")
-                firma_url = f"https://hh.ru/{firma_url['href']}"
-
-                jobs.append(
-                    {'site': 'hh.ru', 'title': title, 'opyt': opyt, 'city': city, 'firma': firma,
-                     'firma_url': firma_url,
-                     'data': data})
+                    jobs.append(
+                        {
+                         'site': domain,
+                         'title': title,
+                         'url': title_url,
+                         'opyt': opyt,
+                         # 'city': city,
+                         'company': company,
+                         'company_url': company_url,
+                         } | data
+                    )
                 # print(jobs)
             else:
                 errors.append({'url': url_, 'error': 'title_card не найден'})
@@ -68,7 +88,7 @@ def hhru(url_):
     else:
         errors.append({'url': url_, 'error': response.status_code})
 
-    return jobs, errors
+    return jobs, errors + data['errors_url']
 
 
 def get_details(urls_, headers_):
@@ -90,7 +110,7 @@ def get_details(urls_, headers_):
 
         description = soup.find('div', {'data-qa': "vacancy-description"})
         if description:
-            description = description.text
+            # description = description
 
             job_day = soup.find('p', {'data-qa': "vacancy-view-employment-mode"})
             if job_day:
@@ -114,8 +134,8 @@ def get_details(urls_, headers_):
             # date_public=datetime.strptime(date_public.split(" ")[2], "%d %B %Y")
 
             address = soup.find('div', {'data-qa': 'vacancy-company'})
-            if address:
-                address = address.text
+            # if address:
+            #     address = address.text
         else:
             errors.append({'url': urls_, 'error': 'нет тэга vacancy-description'})
 
@@ -128,7 +148,7 @@ def get_details(urls_, headers_):
             'logo_url': logo_url,
             'date_public': str(date_public),
             'address': str(address),
-            'skills': skills,
+            'skills': str(skills),
             'errors_url': errors}
 
 
@@ -138,6 +158,7 @@ def superjobru(url_):
     # url_ = ('https://russia.superjob.ru/vacancy/search/?keywords=Python')
     errors = []
     jobs = []
+    data = []
     headers_ = headers[randint(0, len(headers) - 1)]
     response = requests.get(url_, headers=headers_)
 
@@ -152,37 +173,51 @@ def superjobru(url_):
             title_card = div.a
             if title_card:
                 title = title_card.text
-                title_url = domain + title_card['href']
-                salary = div.find("div", class_="f-test-text-company-item-salary")
-                if salary:
-                    salary = salary.text
-                logo = div.find('img')
-                if logo:
-                    logo_url = div.find('img').get('src')
+                if not not_needed_records(title):
 
-                firma = div.find('span', class_='f-test-text-vacancy-item-company-name')
-                if firma:
-                    firma_url = domain + firma.a['href']
-                    firma = firma.get_text(strip=True)
+                    title_url = domain + title_card['href']
+                    salary = div.find("div", class_="f-test-text-company-item-salary")
+                    if salary:
+                        salary = salary.text
+                    logo = div.find('img')
+                    if logo:
+                        logo_url = div.find('img').get('src')
 
-                city = div.find('span', class_='_3a7uW _2myqe _3r0vg _3agHj')
-                if city:
-                    city = city.get_text(strip=True)
+                    company = div.find('span', class_='f-test-text-vacancy-item-company-name')
+                    if company:
+                        company_url = domain + company.a['href']
+                        company = company.get_text(strip=True)
 
-                date_public = div.find('span', class_='_3a7uW _2myqe _3FVnJ _3agHj')
-                if date_public:
-                    date_public = date_public.get_text(strip=True)
+                    city = div.find('span', class_='_3a7uW _2myqe _3r0vg _3agHj')
+                    if city:
+                        city = city.get_text(strip=True)
 
-                address = div.find('span', class_='f-test-text-company-item-location')
-                if address:
-                    address = address.get_text(strip=True)
+                    date_public = div.find('span', class_='_3a7uW _2myqe _3FVnJ _3agHj')
+                    if date_public:
+                        date_public = date_public.get_text(strip=True)
 
-                data = details_superjob(title_url, headers_)
+                    address = div.find('span', class_='f-test-text-company-item-location')
+                    if not address:
+                        address = div.find('span', class_='_3a7uW _2myqe _3r0vg _3agHj')
 
-                jobs.append({
-                    'site': 'superjob.ru', 'title': title, 'city': city, 'firma': firma, 'firma_url': firma_url,
-                    'address': address, 'data': data, "logo_url": logo_url, "salary": salary,
-                    'date_public': date_public})
+                    if not address:
+                        address = div.find('span', class_='_3-Il9 _11FhW ayzah dYQFr _3a7uW _2myqe _3r0vg _3agHj')
+
+                    if address:
+                        address = f"<div> {address.get_text(strip=True)} </div>"
+                    else:
+                        address = "не удалось определить адрес"
+
+                    data = details_superjob(title_url, headers_)
+
+                    jobs.append({
+                                    'site': domain,
+                                    'title': title,
+                                    'url': title_url,
+                                    # 'city': city,
+                                    'company': company, 'company_url': company_url,
+                                    'address': address, "logo_url": logo_url, "salary": salary,
+                                    'date_public': date_public} | data)
                 # print(jobs)
             else:
                 errors.append({'url': url_, 'error': 'title_card не найден'})
@@ -190,7 +225,7 @@ def superjobru(url_):
     else:
         errors.append({'url': url_, 'error': response.status_code})
 
-    return jobs, errors
+    return jobs, errors + data['errors_url']
 
 
 def details_superjob(urls_, headers_):
@@ -206,7 +241,8 @@ def details_superjob(urls_, headers_):
 
             description = main_div.find('span', class_="mrLsm _3a7uW _2myqe _3r0vg _3agHj _1zcvm")
             if description:
-                description = description.get_text(strip=True)
+                description = f"<div> {description} </div>"
+            #     description = description.get_text(strip=True)
 
             skills = main_div.find('div', class_="-lWKU _3XDe- _1zFiz _3Oc5C _3p5Fx")
             if skills:
@@ -218,8 +254,8 @@ def details_superjob(urls_, headers_):
     else:
         errors.append({'url': urls_, 'error': 'нет доступа к ссылке подробнее'})
 
-    return {'description': description, 'opyt': opyt, 'skills': skills, 'errors': errors}
-
+    return {'description': description, 'opyt': opyt, 'skills': str(skills),
+            'errors_url': errors}
 
 # if __name__ == '__main__':
 #     jobs_superjob, errors_superjob = superjobru()
