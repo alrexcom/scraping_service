@@ -24,10 +24,7 @@ headers = [
     },
 ]
 
-
-
-
-notneed = ['преподаватель', 'учитель', 'педагог','школу', 'школа','тьютор']
+notneed = ['преподаватель', 'учитель', 'педагог', 'школу', 'школа', 'тьютор']
 
 
 def not_needed_records(title):
@@ -72,14 +69,14 @@ def hhru(url_):
 
                     jobs.append(
                         {
-                         'site': domain,
-                         'title': title,
-                         'url': title_url,
-                         'opyt': opyt,
-                         # 'city': city,
-                         'company': company,
-                         'company_url': company_url,
-                         } | data
+                            'site': domain,
+                            'title': title,
+                            'url': title_url,
+                            'opyt': opyt,
+                            # 'city': city,
+                            'company': company,
+                            'company_url': company_url,
+                        } | data
                     )
                 # print(jobs)
             else:
@@ -257,12 +254,135 @@ def details_superjob(urls_, headers_):
     return {'description': description, 'opyt': opyt, 'skills': str(skills),
             'errors_url': errors}
 
-# if __name__ == '__main__':
-#     jobs_superjob, errors_superjob = superjobru()
-#
-#     jobs_hh, errors_hh = hhru()
-#
-#     with open('vacans.txt', 'w', encoding='utf-8') as f:
-#         f.write(str(jobs_hh + jobs_superjob))
-#
-#     print("ok")
+
+def zarplataru(url_):
+    """
+      https: // zarplata.ru / search / vacancy?hhtmFrom = main & hhtmFromLabel = vacancy_search_line & search_field =
+       name & search_field = company_name & search_field = description & enable_snippets = false & L_save_area =
+       true & schedule = remote & text = sql
+    """
+    domain = 'https://zarplata.ru'
+    errors = []
+    jobs = []
+    data = []
+    headers_ = headers[randint(0, len(headers) - 1)]
+    response = requests.get(url_, headers=headers_)
+    if response.status_code == 200:
+        soup = BS(response.text, 'html.parser')
+        # main_div=soup.find_all('div', class_='vacancy_list')
+        main_div = soup.find('div', {'data-qa': 'vacancy-serp__results'})
+        div_list = main_div.find_all('div', class_='vacancy-search-item__card')
+
+        for div in div_list:
+            title_card = div.h2
+            if title_card:
+                # opyt = div.find('span', {'data-qa': 'vacancy-serp__vacancy-work-experience'})
+                # if opyt:
+                #     opyt = opyt.text
+
+                title = title_card.get_text(strip=False)
+                if not not_needed_records(title):
+                    title_url = title_card.a['href']
+                    # salary = div.find('span', class_='compensation-text')
+                    # job_day = div.find('span', {"data-qa": "vacancy-label-remote-work-schedule"})
+                    # if job_day:
+                    #     job_day = job_day.get_text()
+
+                    opyt = div.find('span', {"data-qa": "vacancy-serp__vacancy-work-experience"})
+                    if opyt:
+                        opyt = opyt.get_text()
+                    # На другой странице по ссылке на вакансию подробнее
+                    data = get_details_zpru(title_url, headers_)
+
+                    company_url = div.find('a', {'data-qa': 'vacancy-serp__vacancy-employer'})
+                    company = company_url.span.text
+
+                    if div.find('div', class_="vacancy-serp-item-body__logo"):
+                        logo_url = div.find('div',
+                                            class_="vacancy-serp-item-body__logo").img['src']
+
+                    # city = div.find('span', {'data-qa': 'vacancy-serp__vacancy-address'}).span.text
+
+                    company_url = domain + company_url['href']
+
+                    jobs.append(
+                        {
+                            'site': domain,
+                            'title': title,
+                            'url': title_url,
+                            'opyt': opyt,
+                            'logo_url': logo_url,
+                            # 'city': city,
+                            'company': company,
+                            'company_url': company_url,
+                        } | data
+                    )
+                # print(jobs)
+            else:
+                errors.append({'url': url_, 'error': 'title_card не найден'})
+            # print(title)
+    else:
+        errors.append({'url': url_, 'error': response.status_code})
+
+    return jobs, errors + data['errors_url']
+
+
+def get_details_zpru(urls_, headers_):
+    # url_='https://armavir.hh.ru/vacancy/103984269?query=Delphi&hhtmFrom=vacancy_search_list'
+    response_ = requests.get(urls_, headers=headers_)
+    # with codecs.open('job.html', 'w', 'UTF-8') as f:
+    #     f.write(str(response.text))
+
+    description = 'нет описания'
+    salary = 'не указана зарплата'
+    job_day = 'длительность рабочего дня не указана'
+    date_public = 'дата публикации не указана'
+    address = 'нет адреса'
+    logo_url = ''
+    skills = []
+    errors = []
+    if response_.status_code == 200:
+        soup = BS(response_.text, 'html.parser')
+        # main_row = soup.find("div", class_="row-content")
+
+        if soup:
+            description = soup.find('div', {'data-qa': "vacancy-description"})
+
+            job_day = soup.find('p', {'data-qa': "vacancy-view-employment-mode"})
+            if job_day:
+                job_day = job_day.text
+
+            salary = soup.find("div",class_="vacancy-title")
+            if salary:
+                salary = salary.span.text
+
+            if soup.find('div', class_='vacancy-company-logo-redesigned'):
+                logo_url = soup.find('div', class_='vacancy-company-logo-redesigned').img.get('src')
+
+            skills = [t.string for t in soup.findAll('li', {'data-qa': 'skills-element'})]
+
+            date_public = soup.find('p', class_='vacancy-creation-time-redesigned')
+            if date_public:
+                date_public = date_public.text
+                date_public = date_public.split(" ")[2]
+            # date_public = datetime.strptime(date_string, "%d\xa0%B\xa0%Y")
+
+            # date_public=datetime.strptime(date_public.split(" ")[2], "%d %B %Y")
+
+            # address = soup.find('div', {'data-qa': 'vacancy-company'})
+            # if address:
+            #     address = address.text
+        else:
+            errors.append({'url': urls_, 'error': 'нет тэга vacancy-description'})
+
+    else:
+        errors.append({'url': urls_, 'error': response_.status_code})
+
+    return {'description': str(description),
+            'salary': str(salary),
+            'job_day': str(job_day),
+            # 'logo_url': logo_url,
+            'date_public': str(date_public),
+            'address': str(address),
+            'skills': str(skills),
+            'errors_url': errors}

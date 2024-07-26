@@ -8,18 +8,21 @@
         <div class="card my-3">
             <div class="card-header">
                 <div class="container">
-                    <div class="row">
+                    <div class="row" >
                         <p class="my-2">
                             <a class="btn btn-primary" href="{{ obj.url }}"
                                id="top-link">    {{ obj.title }}
                             </a>
                         </p>
                     </div>
-                    <div class="row">
+                    <div class="row" style ="background-color: #4ac1f7">
                         <div class="col">
                             <h4> {{ obj.company }} </h4>
-                            <p class="my-1">{{ obj.address | safe}}</p>
+{#                            {% if obj.site == "https://hh.ru" %}#}
+{#                            <p class="my-1">{{ obj.address | safe}}</p>#}
+{#                            {% else %}#}
                             <p><img src="{{ obj.logo_url }}" alt="{{ obj.company }}" width="90px"></p>
+{#                            {% endif %}#}
                         </div>
                         <div class="col">
                             <ul class="list-unstyled">

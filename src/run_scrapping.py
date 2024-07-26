@@ -10,7 +10,7 @@ import django
 
 django.setup()
 
-from work import hhru, superjobru
+from work import hhru, superjobru, zarplataru
 from scraping.models import *
 
 city = City.objects.all().first()
@@ -19,13 +19,19 @@ language = Language.objects.all().first()
 
 tema = 'sql'
 
-hh_url = f"https://hh.ru/search/vacancy?text={tema}&salary=&ored_clusters=true&area=113&hhtmFrom=vacancy_search_list&hhtmFromLabel=vacancy_search_line"
+hh_url = (f"https://hh.ru/search/vacancy?text={tema}&salary=&ored_clusters=true&area=113&hhtmFrom=vacancy_search_list"
+          f"&hhtmFromLabel=vacancy_search_line")
 
 superjob_url = f"https://russia.superjob.ru/vacancy/search/?keywords={tema}"
 
+zarplataru_url=(f"https://zarplata.ru/search/vacancy?hhtmFrom=main&hhtmFromLabel=vacancy_search_line&search_field=name"
+                f"&search_field=company_name&search_field=description&enable_snippets=false&L_save_area=true&sched"
+                f"ule=remote&text={tema}")
+
 parsers = (
-    # (hhru, hh_url),
+    (hhru, hh_url),
     (superjobru, superjob_url),
+    (zarplataru, zarplataru_url),
 )
 
 jobs, errors = [], []
