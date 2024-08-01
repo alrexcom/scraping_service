@@ -4,6 +4,10 @@ from django.utils import timezone
 from scraping.utils import from_cyrillic_to_eng
 
 
+def defaults_url():
+    return {'hhru': '', 'superjob': '', 'zarplataru': ''}
+
+
 class City(models.Model):
     name = models.CharField(max_length=100,
                             verbose_name="Наименование населённого пункта", unique=True)
@@ -41,6 +45,11 @@ class Language(models.Model):
     def __str__(self):
         return self.name
 
+    # @classmethod
+    # def get_language(cls, language_id):
+    #     # return Language.objects.filter(id=language_id).values()[0]['name']
+    #     return cls.objects.filter(id=language_id).values()[0]['name']
+
 
 class Vacancy(models.Model):
     """
@@ -65,12 +74,17 @@ class Vacancy(models.Model):
     description = models.TextField(verbose_name="Описание вакансии")
     # default date
     timestamp = models.DateField(default=timezone.now)
+    params_find = models.CharField(max_length=150, verbose_name="Строка поиска", default=None, null=True)
 
     # timestamps = models.DateField(auto_now_add=True, default=django.utils.timezone.now)
 
     class Meta:
         verbose_name = 'Вакансию'
         verbose_name_plural = 'Вакансии'
+        # asc
+        # ordering=['timestamp']
+        # desc
+        ordering = ['-timestamp']
 
     def __str__(self):
         return self.title
@@ -79,3 +93,15 @@ class Vacancy(models.Model):
 class Error(models.Model):
     timestamp = models.DateField(default=timezone.now)
     data = models.JSONField(default=dict)
+
+
+class Url(models.Model):
+    city = models.ForeignKey('City', on_delete=models.CASCADE, verbose_name="Город")
+    language = models.ForeignKey(Language, on_delete=models.CASCADE,
+                                 verbose_name="Язык программирования")
+    url_data = models.JSONField(default=defaults_url)
+    action = models.BooleanField(default=True, verbose_name="Действующий")
+
+    class Meta:
+        # Уникальность по городу и языку
+        unique_together = (('city', 'language'),)

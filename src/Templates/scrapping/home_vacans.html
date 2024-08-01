@@ -17,7 +17,8 @@
                     </div>
                     <div class="row" >
                         <div class="col">
-                            <h4> {{ obj.company }} </h4>
+                            <h5> {{ obj.company }} </h5>
+                            <h6>{{ obj.address }}</h6>
 {#                            {% if obj.site == "https://hh.ru" %}#}
 {#                            <p class="my-1">{{ obj.address | safe}}</p>#}
 {#                            {% else %}#}
@@ -109,6 +110,7 @@
                             <a href="{{ obj.site }}">
                                 {{ obj.site.title }}
                             </a>
+                            {{ obj.params_find }}
                         </small>
                     </footer>
 
